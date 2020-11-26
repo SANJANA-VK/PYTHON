@@ -15,10 +15,10 @@ def install():
     else:
         os.system("tput seta4 4")
         print("Failed!!")
+    
       
    
-    print("Downloading docker -ce\n")
-    if out[-1] == "complete"
+   
   print("""
        -----------------------------------
        Press 1.Install docker
@@ -40,7 +40,7 @@ def install():
        
        
 ch = input("Enter what  u want to do : ")
-            if int(ch) == 1:
+                if int(ch) == 1:
                 install()
                 time.sleep(5)
                 
@@ -105,16 +105,6 @@ ch = input("Enter what  u want to do : ")
             else:
                 print("Not supported ")
                 
-        elif int(choice) == 3:     # hadoop local
-            print("hadoop under process")
-        elif int(choice) == 4:     # cloud local
-            print("cloud under process")
-        elif int(choice) == 5:
-            exit()
-        else:
-            print("Not Supported")
-
-   
-   
+       
                 
                          
