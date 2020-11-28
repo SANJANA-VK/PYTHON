@@ -136,8 +136,14 @@ def webpage():
      fh.close()
      
     
-    
+os.system("tput setaf 4")
+print("--------------------------------------------------------------------")
+os.system("tput setaf 10")
+print("\t\t\t Automation")
+os.system("tput setaf 4")
+print("--------------------------------------------------------------------")    
 
+os.system("tput setaf 12")				      
 print("""
     --------------------------------
         Press 1: File handling
@@ -151,13 +157,13 @@ print("""
    """)
     
     
-  
+os.system("tput setaf 7")  
 ch = input("What would you want to do today?")
 
 
 if int(ch)==1:                        #FILE HANDLING
   os.system("clear")
-  
+  os.system("tput setaf 12")
   print("""
       --------------------------------------
           Press 1:Create a directory
@@ -172,7 +178,7 @@ if int(ch)==1:                        #FILE HANDLING
           Press 10:To exit
       --------------------------------------
      """)
-     
+     os.system("tput setaf 7")
      ch1=input("What is your choice?\n")
      ch1=int(ch1)
      
@@ -240,6 +246,7 @@ if int(ch)==1:                        #FILE HANDLING
       
 elif int(ch)==2:                      #STORAGE
   os.system("clear")
+  os.system("tput setaf 12")				      
   
   print("""
       --------------------------------------
@@ -253,6 +260,7 @@ elif int(ch)==2:                      #STORAGE
           Press 8:To exit
       --------------------------------------
      """)
+   os.system("tput setaf 7")
    ch3=int(input("Enter your choice \n"))
    
    if ch3==1:
@@ -300,7 +308,7 @@ elif int(ch)==2:                      #STORAGE
     
 elif int(ch)==3:                      #NETWORKING
   os.system("clear")
-  
+  os.system("tput setaf 12")
   print("""
       --------------------------------------
           Press 1:To know the ip address
@@ -315,7 +323,7 @@ elif int(ch)==3:                      #NETWORKING
           Press 10:To exit
       --------------------------------------
      """)
-    
+  os.system("tput setaf 7")  
   ch4=int(input("Enter your choice: \n"))
   
   if ch4==1:
@@ -391,7 +399,7 @@ else:
                              
 elif int(ch)==4:                      #SOFTWARES
   os.system("clear")
-  
+  os.system("tput setaf 12")
   print("""
       --------------------------------------
           Press 1:Configure yum
@@ -402,7 +410,8 @@ elif int(ch)==4:                      #SOFTWARES
           Press 6:To exit
       --------------------------------------
      """)
-   ch4=int(input("Enter your choice: \n"))
+   os.system("tput setaf 7")
+   ch4=input("Enter your choice: \n")
    ch4=int(ch4)
    
    if ch4==1:
@@ -471,7 +480,7 @@ elif int(ch)==4:                      #SOFTWARES
   
 elif int(ch)==5:                      #USER ADMINSTRATION
   os.system("clear")
-  
+  os.system("tput setaf 12")
   print("""
       --------------------------------------
           Press 1:To add user
@@ -486,6 +495,7 @@ elif int(ch)==5:                      #USER ADMINSTRATION
           Press 10:To exit
       --------------------------------------
      """)
+  os.system("tput setaf 7")
   ch5=int(input("Enter your choice:\n")
   
   if ch5==1:
