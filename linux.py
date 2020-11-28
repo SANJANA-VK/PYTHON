@@ -4,8 +4,8 @@ import subprocess as sb
 from keyboard import press
 
 
-//FUNCTIONS    
-def Lvm():                            //Creates lvm partition
+#FUNCTIONS    
+def Lvm():                            #Creates lvm partition
     ch=input("Do you want to know the hard disk information:[Y/N]\n")
     if ch=="Y" or ch=="y":
         sb.call("fdisk -l",shell=True)
@@ -113,6 +113,28 @@ def change_owner():
     file=input("Enter the file name: \n")
     sb.call("chown {} {}".format(owner,file),shell=True)
   
+def apache_server():
+    out = sb.getstatusoutput("rpm -q httpd")
+    if out[0] == 1:
+		if 'not installed' in out[1]:
+			out = sb.getstatusoutput('yum install httpd -y')
+			if 'complete!' in out[1]:
+				print("Succesfully installed \n")
+	else:
+		out = sb.getstatusoutput('yum install httpd -y')
+		if 'complete!' in out[1
+                print("Succesfully installed \n")
+                              
+def webpage():
+     f=input("Enter the file name: \n")
+     fh = open("/var/www/html/{}".format(f), "+w")
+     lines_of_text = []
+     input=input("Enter the content of webpage:  \n")
+     for i in input:
+         lines_of_text=lines_of_text.append(i)
+     fh.writelines(lines_of_text)
+     fh.close()
+     
     
     
 
@@ -133,7 +155,7 @@ print("""
 ch = input("What would you want to do today?")
 
 
-if int(ch)==1:                        //FILE HANDLING
+if int(ch)==1:                        #FILE HANDLING
   os.system("clear")
   
   print("""
@@ -213,10 +235,10 @@ if int(ch)==1:                        //FILE HANDLING
       exit()
       
     else:
-      print("Not Supported!!\n")
+      os.system("tput setaf 1 | echo 'Sorry Not Supported!!'")
       exit()
       
-elif int(ch)==2:                      //STORAGE
+elif int(ch)==2:                      #STORAGE
   os.system("clear")
   
   print("""
@@ -272,11 +294,11 @@ elif int(ch)==2:                      //STORAGE
     exit()
     
   else:
-    print("Not Supported\n")
+    os.system("tput setaf 1 | echo 'Sorry Not Supported!!'")
     exit()
     
     
-elif int(ch)==3:                      //NETWORKING
+elif int(ch)==3:                      #NETWORKING
   os.system("clear")
   
   print("""
@@ -297,7 +319,11 @@ elif int(ch)==3:                      //NETWORKING
   ch4=int(input("Enter your choice: \n"))
   
   if ch4==1:
-    os.system("ifconfig ")
+    res=sb.getstatusoutput("ifconfig")
+    res1=res.split("inet")
+    ip=res1[1].split()
+    print("IP ADDRESS={}".format(ip[0]))
+    print("NETMASK={}".format(ip[2]))
     time.sleep(5)
     continue
     
@@ -359,9 +385,91 @@ elif int(ch)==3:                      //NETWORKING
 else:
   print("Not supported\n")
   exit()
+                              
+                              
+                              
+                             
+elif int(ch)==4:                      #SOFTWARES
+  os.system("clear")
+  
+  print("""
+      --------------------------------------
+          Press 1:Configure yum
+          Press 2:Configure epel
+          Press 3:Configure web server
+          Press 4:To check the software name
+          Press 5:To download a software
+          Press 6:To exit
+      --------------------------------------
+     """)
+   ch4=int(input("Enter your choice: \n"))
+   ch4=int(ch4)
+   
+   if ch4==1:
+     inp=input("Where do you want to configure yum?\n 1.RHEL GUI+CLI \n 2.RHEL CLI\n")
+     if inp=="1":
+          fh = open("/etc/yum.repos.d/yum.repo", "w+")
+          lines_of_text = ["[AppStream]\n", "baseurl=file:///run/media/root/RHEL-8-0-0-BaseOS-x86_64/AppStream\n", "gpgcheck=0\n\n","[BaseOS]\n","baseurl=file:///run/media/root/RHEL-8-0-0-BaseOS-x86_64/BaseOS\n","gpgcheck=0\n"]
+          fh.writelines(lines_of_text)
+          fh.close()
+     elif inp=="2":
+          os.system("mkdir /mountdvd")
+          os.system("mount /dev/cdrom /mountdvd")
+          fh = open("/etc/yum.repos.d/yum.repo", "w+")
+          lines_of_text = ["[AppStream]\n", "baseurl=file:///mountdvd/AppStream\n", "gpgcheck=0\n\n","[BaseOS]\n","baseurl=file:///mountdvd/BaseOS\n","gpgcheck=0\n"]
+          fh.writelines(lines_of_text)
+          fh.close() 
+     sb.getoutput("yum repolist",shell=True)
+     time.sleep(5)
+     continue
+   
+   if ch4==2:
+    p=sb.getstatusoutput("wget https://download1.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm")
+    if p[0]==0:
+           os.system("tput setaf 2 | echo 'Succesfully Downloaded!!'")
+    else:
+           os.system("tput setaf 1 | echo 'Sorry Failed..Try again!!'")
+    time.sleep(5)
+    continue
+          
+   if ch4==3:
+    apache_server()
+    choice=input("Do you want to create a webpage:[Y/N] \n")
+    if choice=="Y":
+          webpage()
+    else:
+          continue
+    sb.getstatusoutput("systemctl start httpd")
+    sb.getstatusoutput("systemctl enable httpd")
+    if p[0]==0:
+          os.system("tput setaf 2 | echo 'Apache webserver is configured'")
+    else:
+          os.system("tput setaf 1 | echo 'Sorry Failed..Try again!!'")
+    
+   time.sleep(5)
+   continue
+          
+   if ch4==4:
+    software=input("Enter the name: \n")
+    sb.call("yum whatprovides {}".format(software))
+    time.sleep(5)
+    continue
+    
+   if ch4==5:
+     software=input("Enter the name of software: \n")
+     p=sb.getstatusoutput("yum insatall {}".format(software))
+     if p[0]==0:
+          os.system("tput setaf 2 | echo 'Downloaded Succesfully'")
+     else:
+          os.system("tput setaf 1 | echo 'Sorry Failed..Try again!!'")
+     time.sleep(5)
+     continue
+          
+          
   
   
-elif int(ch)==5:                      //USER ADMINSTRATION
+  
+elif int(ch)==5:                      #USER ADMINSTRATION
   os.system("clear")
   
   print("""
@@ -393,52 +501,70 @@ elif int(ch)==5:                      //USER ADMINSTRATION
     time.sleep(5)
     continue
   
-  elif ch==3:
+  elif ch5==3:
     gname=input("Enter the group name: \n")
     name=input("Enter the user name: \n")
     os.system("groupadd -G {} {}".format(gname,name))
     time.sleep(5)
     continue
     
-  elif ch==4:
+  elif ch5==4:
     name=input("Enter the username: \n")
     os.system("su {}".format(user))
     
-  elif ch==5:
-    //under process
+  elif ch5==5:
+    os.system("cd /etc")
+    res=sb.getstatusoutput("cat /etc/shadow")
+    users=res[1].split()
+    for user in users:
+          user=user.split(":")
+          print(user[0])
+    time.sleep(8)
+    continue
+          
     
-  elif ch==6:
-    //under permissions
+  elif ch5==6:
+    os.system("cd /etc")
+    res=sb.getstatusoutput("cat /etc/shadow")
+    users=res[1].split()
+    for user in users:
+          user=user.split(":")
+          print(user[0])
+    time.sleep(8)
+    continue
     
-  elif ch==7:
+  elif ch5==7:
     change_permission()
     time.sleep(2)
     continue
     
-  elif ch==8:
+  elif ch5==8:
     change_owner()
     time.sleep(2)
     continue
     
-  elif ch==9:
+  elif ch5==9:
     user=input("Enter the name of user:\n")
     os.system("id -u {}".format(user))
     time.sleep(4)
     continue
     
-  elif ch==10:
+  elif ch5==10:
     exit()
   
   else:
-  print("Not Supported")
+    os.system("tput setaf 1 | echo 'Not Supported'")
+    exit()
+          
+elif ch==6:
+  os.system("tput setaf 4 | echo 'Thank You'")
   exit()
-  
-  
-  
-  
+          
+          
+
 else:
-  print("Thank You\n")
-  exit()
+  os.system("tput setaf 1 | echo 'Something went wrong.....Try again')
+  continue
     
     
   
