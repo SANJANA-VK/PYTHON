@@ -75,31 +75,31 @@ def partition():
     hd=input("Enter the hard disk you want to use for partition: \n")
     s=input("Enter the size of the partition: \n")
     mount=input("Folder name/Mount Point: \n")
-    sb.getoutput("fdisk {}".format(hd),shell=True)
-    time.sleep(2)
+    sb.getoutput("fdisk {}".format(hd))
+    time.sleep(1)
     os.system("echo p")
     press('enter')
-    time.sleep(2)
+    time.sleep(1)
     os.system("echo n")
     press('enter')
-    time.sleep(2)
+    time.sleep(1)
     press('enter')
-    time.sleep(2)
+    time.sleep(1)
     os.system("echo $s")
     press('enter')
-    time.sleep(2)
+    time.sleep(1)
     os.system("echo w")
     press('enter')
-    sb.getoutput("udevadm settle",shell=True)
-    sb.getoutput("mkfs.ext4  {}".format(hd),shell=True)
+    sb.getoutput("udevadm settle")
+    sb.getoutput("mkfs.ext4  {}".format(hd))
     sb.getoutput("mkdir /{}".format(mount))
-    sb.getoutput("mount {}/{}".format(hd,mount),shell=True)
-    sb.getoutput("df -h",shell=True)
+    sb.getoutput("mount {}/{}".format(hd,mount))
+    sb.call("df -h",shell=True)
     
 def change_permission():
-    dir=input("Enter the path of the file: /n")
-    sb.getoutput("ls  -l {}".format(dir),shell=True)
-    person=input("Whose permission you want to change? -To chnage owner permission PRESS o\n  -To change user permission PRESS u\n -To change group permission PRESS g\n")
+    dir=input("Enter the path of the file: \n")
+    sb.getoutput("ls  -l {}".format(dir))
+    person=input("Whose permission you want to change? -To change owner permission PRESS o\n  -To change user permission PRESS u\n -To change group permission PRESS g\n")
     permissions=input("List of permissions:\n  r(read) \n  w(write) \n x(execute)\n")
     sign=input("To remove permission press '-'\n To add permission press '+'\n")
     sb.call("chmod {}{}{}".format(person,sign,permissions),shell=True)
@@ -167,8 +167,7 @@ while True:
           Press 4:Delete the file
           Press 5:View the contents of file
           Press 6:To view list of files present in a directory
-          Press 7:To view the permissions given to a directory or a file
-          Press 8:To change the given permissions to file
+          Press 7:To view the permissions given to a directory/file              Press 8:To change the given permissions to file
           Press 9:To change the owner of file
           Press 10:To exit
           --------------------------------------
@@ -207,19 +206,19 @@ while True:
   
     elif ch1==5:
       file=input("Enter the file name along with path : \n")
-      sb.getoutput("cat {}".format(file))
+      sb.call("cat {}".format(file),shell=True)
       time.sleep(5)
       continue
       
     elif ch1==6:
-      dir=input("Enter the path of the directory: /n")
-      sb.getoutput("ls {}".format(dir))
+      dir=input("Enter the path of the directory: \n")
+      sb.call("ls {}".format(dir),shell=True)
       time.sleep(5)
       continue
       
     elif ch1==7:
-      dir=input("Enter the path of the directory: /n")
-      sb.getoutput("ls  -l {}".format(dir))
+      dir=input("Enter the path of the directory: \n")
+      sb.call("ls  -l {}".format(dir),shell=True)
       time.sleep(5)
       continue
       
@@ -280,7 +279,7 @@ while True:
       continue
     
     elif ch3==5:
-      lvm()
+      Lvm()
       time.sleep(5)
       continue
     
@@ -351,8 +350,8 @@ while True:
     
     elif ch4==5:
       ip=input("Enter the ip address: \n")
-      user=input("Enter the username: /n")
-      os.system("ssh@{} {}",format(user,ip))
+      user=input("Enter the username: \n")
+      os.system("ssh @{} {}".format(user , ip) )
       time.sleep(5)
       continue
     
@@ -377,7 +376,7 @@ while True:
       command=input("Enter the command: \n")
       user=input("Enter the user: \n")
       if user=="":
-        os.system("ssh {} {}",format(ip,command))
+        os.system("ssh {} {}".format(ip,command))
       else:
         os.system("ssh -t  -l {} {} sudo {}".format( user,ip,command))
         time.sleep(5)
@@ -413,10 +412,16 @@ while True:
     if ch4==1:
       inp=int(input("Where do you want to configure yum?\n 1.RHEL GUI+CLI \n 2.RHEL CLI\n"))
       if inp==1:
-        fh = open("/etc/yum.repos.d/yum.repo", "w+")
-        lines_of_text = ["[AppStream]\n", "baseurl=file:///run/media/root/RHEL-8-0-0-BaseOS-x86_64/AppStream\n", "gpgcheck=0\n\n","[BaseOS]\n","baseurl=file:///run/media/root/RHEL-8-0-0-BaseOS-x86_64/BaseOS\n","gpgcheck=0\n"]
-        fh.writelines(lines_of_text)
-        fh.close()
+          fh = open("/etc/yum.repos.d/yum.repo", "w+")
+          lines_of_text = ["[AppStream]\n",
+                           "baseurl=file:///run/media/root/RHEL-8-0-0-BaseOS-x86_64/           AppStream\n",
+                           "gpgcheck=0\n\n",
+                           "[BaseOS]\n", "baseurl=file:///run/ media/root/RHEL-8-0-0-BaseOS-x86_64/BaseOS\n",
+                           "gpgcheck=0\n"]
+          fh.writelines(lines_of_text)
+          fh.close()
+          sb.call("yum repolist", shell=True)
+
       elif inp==2:
         os.system("mkdir /mountdvd")
         os.system("mount /dev/cdrom /mountdvd")
@@ -512,7 +517,7 @@ while True:
     
     elif ch5==4:
       name=input("Enter the username: \n")
-      os.system("su {}".format(user))
+      os.system("su {}".format(name))
     
     elif ch5==5:
       os.system("cd /etc")
@@ -559,7 +564,7 @@ while True:
       exit()
           
   elif ch==6:
-    os.system("tput setaf 4 | echo 'Thank You'")
+    os.system("tput setaf 12 | echo 'Thank You'")
     exit()
   
   else:
@@ -584,7 +589,6 @@ while True:
       
       
    
-    
-      
+
       
 
